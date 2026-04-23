@@ -4,12 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-// import axios from "axios";
+import axios from "axios";
 import { clearAllUserErrors, register } from "@/store/slices/userSlice";
 import { toast } from "react-toastify";
 import SpecialLoadingButton from "./sub-components/SpecialLoadingButton";
 
-// const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -56,16 +56,16 @@ const Register = () => {
     dispatch(register(formData));
   };
 
-//   const handleSeedUser = async () => {
-//     try {
-//       const response = await axios.post(`${API_BASE}/user/seed`);
-//       toast.success(response.data.message);
-//       setEmail("admin@local.dev");
-//       setPassword("password1234");
-//     } catch (error) {
-//       toast.error(error?.response?.data?.message || "Seed user failed");
-//     }
-//   };
+  const handleSeedUser = async () => {
+    try {
+      const response = await axios.post(`${API_BASE}/user/seed`);
+      toast.success(response.data.message);
+      setEmail("akbaroofficial041@gmail.com");
+      setPassword("admin2006");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Seed user failed");
+    }
+  };
 
   useEffect(() => {
     if (error) {
@@ -178,14 +178,14 @@ const Register = () => {
               <SpecialLoadingButton content={"Registering"} />
             )}
 
-            {/* <Button
+            <Button
               type="button"
               variant="secondary"
               className="w-full"
               onClick={handleSeedUser}
             >
               Seed Local Test User
-            </Button> */}
+            </Button>
 
             <p className="text-sm text-center">
               Already have an account? <Link to="/login" className="underline">Login</Link>
