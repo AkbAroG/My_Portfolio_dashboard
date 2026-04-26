@@ -475,7 +475,6 @@
 // };
 
 // export default userSlice.reducer;
-
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -485,11 +484,9 @@ const API_BASE =
 
 axios.defaults.withCredentials = true;
 
-// 🔥 SAFE ERROR HANDLER (recommended)
 const getError = (error) =>
   error.response?.data?.message || error.message || "Something went wrong";
 
-// Attach token if exists
 const savedToken = localStorage.getItem("token");
 if (savedToken) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
@@ -571,67 +568,55 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
 
+    // ✅ resetProfile reducer
+    resetProfile(state) {
+      state.isUpdated = false;
+      state.message = null;
+      state.error = null;
+    },
+
     clearAllErrors(state) {
       state.error = null;
     },
   },
 });
 
-// 🔥 LOGIN
 export const login = (email, password) => async (dispatch) => {
   dispatch(userSlice.actions.loginRequest());
-
   try {
-    const { data } = await axios.post(
-      `${API_BASE}/user/login`,
-      { email, password }
-    );
-
+    const { data } = await axios.post(`${API_BASE}/user/login`, {
+      email,
+      password,
+    });
     if (data.token) {
       localStorage.setItem("token", data.token);
-      axios.defaults.headers.common["Authorization"] =
-        `Bearer ${data.token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
     }
-
     dispatch(userSlice.actions.loginSuccess(data.user));
   } catch (error) {
-    dispatch(
-      userSlice.actions.loginFailed(getError(error))
-    );
+    dispatch(userSlice.actions.loginFailed(getError(error)));
   }
 };
 
-// 🔥 REGISTER
 export const register = (formData) => async (dispatch) => {
   dispatch(userSlice.actions.registerRequest());
-
   try {
-    const { data } = await axios.post(
-      `${API_BASE}/user/register`,
-      formData
-    );
-
+    const { data } = await axios.post(`${API_BASE}/user/register`, formData);
     dispatch(userSlice.actions.registerSuccess(data.user));
   } catch (error) {
-    dispatch(
-      userSlice.actions.registerFailed(getError(error))
-    );
+    dispatch(userSlice.actions.registerFailed(getError(error)));
   }
 };
 
-// 🔥 GET USER
 export const getUser = () => async (dispatch) => {
   try {
     const { data } = await axios.get(`${API_BASE}/user/me`);
     dispatch(userSlice.actions.loadUserSuccess(data.user));
   } catch (error) {
-    dispatch(
-      userSlice.actions.loadUserFailed(getError(error))
-    );
+    dispatch(userSlice.actions.loadUserFailed(getError(error)));
   }
 };
 
-// 🔥 LOGOUT
 export const logout = () => async (dispatch) => {
   try {
     await axios.get(`${API_BASE}/user/logout`);
@@ -642,42 +627,35 @@ export const logout = () => async (dispatch) => {
   }
 };
 
-// 🔥 UPDATE PASSWORD
 export const updatePassword =
-  (currentPassword, newPassword, confirmNewPassword) =>
-  async (dispatch) => {
+  (currentPassword, newPassword, confirmNewPassword) => async (dispatch) => {
     try {
-      const { data } = await axios.put(
-        `${API_BASE}/user/password/update`,
-        { currentPassword, newPassword, confirmNewPassword }
-      );
-
-      dispatch(
-        userSlice.actions.updatePasswordSuccess(data.message)
-      );
+      const { data } = await axios.put(`${API_BASE}/user/password/update`, {
+        currentPassword,
+        newPassword,
+        confirmNewPassword,
+      });
+      dispatch(userSlice.actions.updatePasswordSuccess(data.message));
     } catch (error) {
-      dispatch(
-        userSlice.actions.updatePasswordFailed(getError(error))
-      );
+      dispatch(userSlice.actions.updatePasswordFailed(getError(error)));
     }
   };
 
-// 🔥 UPDATE PROFILE
 export const updateProfile = (formData) => async (dispatch) => {
   try {
     const { data } = await axios.put(
       `${API_BASE}/user/me/profile/update`,
       formData
     );
-
-    dispatch(
-      userSlice.actions.updateProfileSuccess(data.message)
-    );
+    dispatch(userSlice.actions.updateProfileSuccess(data.message));
   } catch (error) {
-    dispatch(
-      userSlice.actions.updateProfileFailed(getError(error))
-    );
+    dispatch(userSlice.actions.updateProfileFailed(getError(error)));
   }
+};
+
+// ✅ resetProfile export
+export const resetProfile = () => (dispatch) => {
+  dispatch(userSlice.actions.resetProfile());
 };
 
 export const clearAllUserErrors = () => (dispatch) => {
