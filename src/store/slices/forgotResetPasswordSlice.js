@@ -104,7 +104,7 @@ import axios from "axios";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
-  "https://my-portfolio-rose-two-59.vercel.app";
+  "https://my-portfolio-rose-two-59.vercel.app/api/v1";
 
 axios.defaults.withCredentials = true;
 
