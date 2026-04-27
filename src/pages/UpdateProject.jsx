@@ -26,6 +26,7 @@ const UpdateProject = () => {
   const [description, setDescription] = useState("");
   const [technologies, setTechnologies] = useState("");
   const [stack, setStack] = useState("");
+  const [category, setCategory] = useState("");
   const [gitRepoLink, setGitRepoLink] = useState("");
   const [deployed, setDeployed] = useState("");
   const [projectLink, setProjectLink] = useState("");
@@ -60,6 +61,7 @@ const UpdateProject = () => {
           setTitle(res.data.project.title);
           setDescription(res.data.project.description);
           setStack(res.data.project.stack);
+          setCategory(res.data.project.category);
           setDeployed(res.data.project.deployed);
           setTechnologies(res.data.project.technologies);
           setGitRepoLink(res.data.project.gitRepoLink);
@@ -95,6 +97,7 @@ const UpdateProject = () => {
     formData.append("description", description);
     formData.append("deployed", deployed);
     formData.append("stack", stack);
+    formData.append("category", category);
     formData.append("technologies", technologies);
     formData.append("gitRepoLink", gitRepoLink);
     formData.append("projectLink", projectLink);
@@ -212,6 +215,30 @@ const UpdateProject = () => {
                           <SelectItem value="Mean">MEAN</SelectItem>
                           <SelectItem value="Next.JS">NEXT.JS</SelectItem>
                           <SelectItem value="React.JS">REACT.JS</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full sm:col-span-4">
+                  <label className="block text-sm font-medium leading-6 text-gray-900">
+                    Category
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                      <Select
+                        value={category}
+                        onValueChange={(selectedValue) =>
+                          setCategory(selectedValue)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Project Category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="MERN">MERN</SelectItem>
+                          <SelectItem value="Data Science">Data Science</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
